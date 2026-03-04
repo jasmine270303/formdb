@@ -9,56 +9,119 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-export default function FormHeader() {
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog"
+
+type FormHeaderProps = {
+  isDirty: boolean
+  onSave: () => void
+  onClear: () => void
+  hasFields: boolean
+}
+
+export default function FormHeader({
+  isDirty,
+  onSave,
+  onClear,
+  hasFields,
+}: FormHeaderProps) {
   return (
     <div className="flex justify-between items-center px-5 py-6 border-b">
-
-   
-      <div className="flex flex-cols-2 gap-2">
-
       
+      {/* Left Section */}
+      <div className="flex flex-cols-2 gap-2">      
         <div className="flex items-center gap-3">
-            <Link href="/dashboard">
-                <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-                </Button>
-            </Link>
+          <Link href="/dashboard">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
         </div>
 
         <div>
-                <h1 className="text-xl font-semibold">
-                    Form 3
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                    Drag and drop fields to build your form
-                </p>
-        </div>
-        
+          <h1 className="text-xl font-semibold">
+            Form 3
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Drag and drop fields to build your form
+          </p>
+        </div>   
       </div>
 
-
-    
+      {/* Right Section */}
       <div className="flex items-center gap-3">
 
         <Tabs defaultValue="canvas">
-            <TabsList>
+          <TabsList>
             <TabsTrigger value="canvas" className="gap-2">
-                <Pencil className="h-4 w-4" />
-                Canvas
+              <Pencil className="h-4 w-4" />
+              Canvas
             </TabsTrigger>
             <TabsTrigger value="preview" className="gap-2">
-                <Eye className="h-4 w-4" />
-                Preview
+              <Eye className="h-4 w-4" />
+              Preview
             </TabsTrigger>
-            </TabsList>
+          </TabsList>
         </Tabs>
 
-        <Button variant="outline" className="gap-2 text-red-500">
-          <Trash className="h-4 w-4" />
-          Clear All
-        </Button>
+        {/* 🔥 Clear All Confirmation */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="outline"
+              disabled={!hasFields}
+              className="gap-2 text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+            >
+              <Trash className="h-4 w-4" />
+              Clear All
+            </Button>
+          </AlertDialogTrigger>
 
-        <Button className="gap-2 bg-blue-700">
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Clear all fields?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently remove all fields from your form.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={onClear}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Yes, Clear All
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Save Button */}
+        <Button
+          onClick={onSave}
+          disabled={!isDirty}
+          className={`
+            px-4 py-2 rounded-md text-white transition-all duration-200
+            ${isDirty 
+              ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+              : "bg-blue-300 cursor-not-allowed"
+            }
+          `}
+        >
           Save Form
         </Button>
 
