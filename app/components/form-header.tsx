@@ -26,6 +26,8 @@ type FormHeaderProps = {
   onSave: () => void
   onClear: () => void
   hasFields: boolean
+  activeTab: "canvas" | "preview"
+  onTabChange: (tab: "canvas" | "preview") => void
 }
 
 export default function FormHeader({
@@ -33,6 +35,8 @@ export default function FormHeader({
   onSave,
   onClear,
   hasFields,
+  activeTab,
+  onTabChange
 }: FormHeaderProps) {
   return (
     <div className="flex justify-between items-center px-5 py-6 border-b">
@@ -60,18 +64,18 @@ export default function FormHeader({
       {/* Right Section */}
       <div className="flex items-center gap-3">
 
-        <Tabs defaultValue="canvas">
-          <TabsList>
-            <TabsTrigger value="canvas" className="gap-2">
-              <Pencil className="h-4 w-4" />
-              Canvas
-            </TabsTrigger>
-            <TabsTrigger value="preview" className="gap-2">
-              <Eye className="h-4 w-4" />
-              Preview
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as "canvas" | "preview")}>
+        <TabsList>
+          <TabsTrigger value="canvas" className="gap-2">
+            <Pencil className="h-4 w-4" />
+            Canvas
+          </TabsTrigger>
+          <TabsTrigger value="preview" className="gap-2">
+            <Eye className="h-4 w-4" />
+            Preview
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
         {/* 🔥 Clear All Confirmation */}
         <AlertDialog>
